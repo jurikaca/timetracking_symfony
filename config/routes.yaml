@@ -1,0 +1,3 @@
+time:
+    path: /time/get_time
+    controller: App\Controller\TimeController::get_time
