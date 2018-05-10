@@ -54,9 +54,11 @@ class TimeController extends Controller
      * @return json
      */
     public function get_time(Request $request){
-        return new Response(json_encode([
+        $response = new Response(json_encode([
             "data"          => $this->getDoctrine()->getRepository(Time::class)->filter($request),
             "items_length"  => $this->getDoctrine()->getRepository(Time::class)->filter($request, true)
         ]));
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 }
