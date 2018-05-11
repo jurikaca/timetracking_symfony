@@ -34,18 +34,19 @@ class TimeController extends Controller
 
         $time = new Time();
         $time->setUserId(1);
-        $time->setDateFinished($request->get('date_finished'));
-        $time->setTimeTracked($request->get('time_tracked'));
-        $time->setTimeTrackedFormatted($request->get('time_tracked_formatted'));
+        $time->setDateFinished(\DateTime::createFromFormat('Y-m-d H:i:s',$request->get('date_finished')));
+        $time->setTimeTracked($request->get('seconds'));
+        $time->setTimeTrackedFormatted(\DateTime::createFromFormat('H:i:s', $request->get('time_tracked_formatted')));
         $time->setDescription($request->get('description'));
-        $time->save();
         $em->persist($time);// tells Doctrine you want to (eventually) save the Product (no queries yet)
         $em->flush();// actually executes the queries (i.e. the INSERT query)
 
-        return json_encode([
+        $response = new Response(json_encode([
             'success'   =>  true,
             'msg'       =>  'Time was successfully logged.'
-        ]);
+        ]));
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        return $response;
     }
 
     /**

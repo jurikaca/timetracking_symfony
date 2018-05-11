@@ -1,3 +1,6 @@
 time:
     path: /time/get_time
     controller: App\Controller\TimeController::get_time
+save_time:
+    path: /time/save_time
+    controller: App\Controller\TimeController::log_time
