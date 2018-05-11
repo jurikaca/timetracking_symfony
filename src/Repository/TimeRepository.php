@@ -27,7 +27,8 @@ class TimeRepository extends ServiceEntityRepository
      * @param bool $count, if this argument is true then number of records is returned as output otherwise the records object is returned
      * @return \Doctrine\ORM\QueryBuilder|int|mixed
      */
-    public function filter(Request $request, $count = false){
+    public function filter(Request $request, $count = false)
+    {
         $field      = $request->query->get('field'); // field to order by
         $asc        = $request->query->get('asc'); // whether order type is asc or desc
         $search     = $request->query->get('search'); // search value for logged time description
@@ -53,6 +54,10 @@ class TimeRepository extends ServiceEntityRepository
         if($count === true){
             return count($items);
         }else{
+            foreach($items as $key => $item){
+                $items[$key]['date_finished'] = $item['date_finished']->format('Y-m-d H:i');
+                $items[$key]['time_tracked_formatted'] = $item['time_tracked_formatted']->format('H:i:s');
+            }
             return $items;
         }
     }

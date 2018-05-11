@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TimeRepository")
@@ -104,5 +106,29 @@ class Time
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * validation rules
+     *
+     * @param ClassMetadata $metadata
+     */
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('user_id', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('user_id', new Assert\GreaterThan(array(
+            'value' => 0,
+        )));
+        $metadata->addPropertyConstraint('time_tracked', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('time_tracked', new Assert\GreaterThan(array(
+            'value' => 0,
+        )));
+        $metadata->addPropertyConstraint('date_finished', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('date_finished', new Assert\DateTime());
+
+        $metadata->addPropertyConstraint('time_tracked_formatted', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('time_tracked_formatted', new Assert\Time());
+
+        $metadata->addPropertyConstraint('description', new Assert\NotBlank());
     }
 }
